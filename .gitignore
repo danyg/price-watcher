@@ -26,3 +26,4 @@ yarn-error.log*
 
 # Docker
 pricewatcher.sqlite
+/config/config.ts
