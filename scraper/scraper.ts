@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import puppeteer from "puppeteer";
 import config from "../config/config";
 import { AppDataSource } from "../db/data-source";

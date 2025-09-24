@@ -5,13 +5,13 @@ export class WatchedProduct {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column('text')
   name!: string;
 
-  @Column()
+  @Column('text')
   url!: string;
 
-  @Column()
+  @Column('text')
   selectorWithPrice!: string;
 
   @Column('float')
