@@ -6,6 +6,7 @@ import * as DB from "../db/entities";
 import { notifyPriceDrop } from "../notifier/notifyPriceDrop";
 
 import { WatchedProduct } from "../types";
+import { toPrice } from "./toPrice";
 
 export async function scrapeAndStore() {
   await AppDataSource.initialize();
@@ -42,9 +43,7 @@ export async function scrapeAndStore() {
     const priceText = await getElementValue(product.selectorWithPrice);
     log(`scraping|${product.name}`, `price raw is ${priceText}`);
 
-    const currentPrice = parseFloat(
-      priceText.replace(/[^\d.,]/g, "").replace(",", "")
-    );
+    const currentPrice = toPrice(priceText);
     log(`scraping|${product.name}`, `current price is ${currentPrice}`);
     await persistHistory(product, currentPrice);
 
