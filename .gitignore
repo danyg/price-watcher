@@ -1,0 +1,28 @@
+# Node
+node_modules/
+**/node_modules/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+
+# Build
+/dist/
+/build/
+/web/build/
+/web/dist/
+
+# Database
+*.sqlite
+
+# Env
+.env
+
+# VSCode
+.vscode/
+
+# Docker
+pricewatcher.sqlite
