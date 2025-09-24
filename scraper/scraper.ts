@@ -14,14 +14,22 @@ export async function scrapeAndStore() {
   log("root", "Launching browser...");
   const browser = await puppeteer.launch({
     headless: true,
-    args: ["--disable-extensions"],
+    args: [
+      "--disable-extensions",
+      "--no-sandbox",
+      "--disable-setuid-sandbox",
+      "--disable-dev-shm-usage",
+    ],
   });
   const page = await browser.newPage();
 
   // Set browser to report Spain as location and language
   const context = browser.defaultBrowserContext();
 
-  await page.setGeolocation({ latitude: config.location.latitude, longitude: config.location.longitude }); // Madrid, Spain
+  await page.setGeolocation({
+    latitude: config.location.latitude,
+    longitude: config.location.longitude,
+  }); // Madrid, Spain
   await page.setExtraHTTPHeaders({
     "Accept-Language": config.location.languageHeader,
   });
@@ -108,4 +116,3 @@ const getElementValueCreator =
       .wait();
 
 const wait = (t: number) => new Promise((r) => setTimeout(r, t));
-

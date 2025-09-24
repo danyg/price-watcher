@@ -6,11 +6,11 @@ module.exports = {
       args: "web/api-server.ts",
       watch: false
     },
-    {
-      name: "cron-job",
-      script: "tsx",
-      args: "scheduler/cron.ts",
-      watch: false
-    }
+    // {
+    //   name: "cron-job",
+    //   script: "tsx",
+    //   args: "scheduler/cron.ts",
+    //   watch: false
+    // }
   ]
 };

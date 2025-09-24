@@ -1,1 +1,4 @@
-0 12 * * * tsx scheduler/cron.ts
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+PUPPETEER_CACHE_DIR=/app/puppeteer-cache
+
+* 12 * * * cd /app; ./scheduler/cron.ts >> /app/config/cron.log 2>&1
