@@ -1,5 +1,7 @@
 FROM node:20-alpine
 WORKDIR /app
 COPY . .
-RUN npm install -g tsx && npm install
-CMD ["sh", "-c", "crond && tsx scheduler/cron.ts"]
+RUN npm install -g tsx pm2 && npm install
+EXPOSE 3001
+COPY pm2.config.js ./pm2.config.js
+CMD ["sh", "-c", "crond && pm2-runtime pm2.config.js"]
