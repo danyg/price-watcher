@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
+import path from "path";
 
 import { WatchedProduct, PriceHistory } from "../db/entities";
 import { AppDataSource } from "../db/data-source";
@@ -7,6 +8,9 @@ import { AppDataSource } from "../db/data-source";
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Serve React build static files
+app.use(express.static(path.join(__dirname, "../build")));
 
 app.get("/api/products", async (_req: Request, res: Response) => {
   await AppDataSource.initialize();
@@ -21,6 +25,11 @@ app.get("/api/history/:productId", async (req: Request, res: Response) => {
     order: { checkedAt: "DESC" },
   });
   res.json(history);
+});
+
+// Fallback to index.html for React Router
+app.get("*", (_req, res) => {
+  res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
 app.listen(3001, () => {
