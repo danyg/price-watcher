@@ -1,4 +1,22 @@
 import React, { useEffect, useState } from "react";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Box,
+  Divider,
+} from "@mui/material";
+import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from "recharts";
 
 interface Product {
   id: number;
@@ -36,39 +54,57 @@ function App() {
   }, [selectedProduct]);
 
   return (
-    <div style={{ padding: 32 }}>
-      <h1>Watched Products</h1>
-      <ul>
+    <Container maxWidth="md" sx={{ py: 4 }}>
+      <Typography variant="h3" gutterBottom align="center">
+        Watched Products
+      </Typography>
+      <List>
         {products.map((p) => (
-          <li key={p.id}>
-            <button onClick={() => setSelectedProduct(p)}>
-              {p.name}
-            </button>
-          </li>
+          <ListItem key={p.id} disablePadding>
+            <ListItemButton selected={selectedProduct?.id === p.id} onClick={() => setSelectedProduct(p)}>
+              <ListItemText primary={p.name} />
+            </ListItemButton>
+          </ListItem>
         ))}
-      </ul>
+      </List>
+      <Divider sx={{ my: 4 }} />
       {selectedProduct && (
-        <div style={{ marginTop: 32 }}>
-          <h2>Price History for {selectedProduct.name}</h2>
-          <table border={1} cellPadding={8}>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((h) => (
-                <tr key={h.id}>
-                  <td>{new Date(h.checkedAt).toLocaleString()}</td>
-                  <td>{h.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Box>
+          <Typography variant="h5" gutterBottom>
+            Price History for {selectedProduct.name}
+          </Typography>
+          <Paper sx={{ mb: 4, p: 2 }}>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={history.map(h => ({ ...h, checkedAt: new Date(h.checkedAt).toLocaleString() }))}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="checkedAt" tick={{ fontSize: 12 }} angle={-30} textAnchor="end" interval={Math.floor(history.length / 10)} />
+                <YAxis dataKey="price" tick={{ fontSize: 12 }} />
+                <Tooltip />
+                <Line type="monotone" dataKey="price" stroke="#1976d2" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          </Paper>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Price</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {history.map((h) => (
+                  <TableRow key={h.id}>
+                    <TableCell>{new Date(h.checkedAt).toLocaleString()}</TableCell>
+                    <TableCell>{h.price}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       )}
-    </div>
+    </Container>
   );
 }
 
