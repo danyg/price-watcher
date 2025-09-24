@@ -38,3 +38,10 @@ export async function scrapeAndStore() {
   }
   await browser.close();
 }
+
+if (require.main === module) {
+  scrapeAndStore().catch((err) => {
+    console.error("Error during scraping:", err);
+    process.exit(1);
+  });
+}
