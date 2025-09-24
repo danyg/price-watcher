@@ -16,12 +16,25 @@ export async function scrapeAndStore() {
     args: ["--disable-extensions"],
   });
   const page = await browser.newPage();
+
+  // Set browser to report Spain as location and language
+  const context = browser.defaultBrowserContext();
+
+  await page.setGeolocation({ latitude: 40.4168, longitude: -3.7038 }); // Madrid, Spain
+  await page.setExtraHTTPHeaders({
+    "Accept-Language": "es-ES,es;q=0.9",
+  });
+  await page.emulateTimezone("Europe/Madrid");
+
   const getElementValue = getElementValueCreator(page);
 
   for (const product of config.watchedProducts) {
+    await context.overridePermissions(new URL(product.url).origin, [
+      "geolocation",
+    ]);
+
     log(`scraping|${product.name}`, `navigating to page...`);
     await page.goto(product.url, { waitUntil: "networkidle2" });
-    
 
     log(`scraping|${product.name}`, `waiting for price...`);
     await waitForPrice(page, product);
