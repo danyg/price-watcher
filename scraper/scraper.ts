@@ -15,7 +15,7 @@ export async function scrapeAndStore() {
       product.selectorWithPrice,
       (el: Element) => el.textContent || ""
     );
-    const price = parseFloat(
+    const currentPrice = parseFloat(
       priceText.replace(/[^\d.,]/g, "").replace(",", ".")
     );
 
@@ -28,12 +28,12 @@ export async function scrapeAndStore() {
     }
     const history = AppDataSource.manager.create(PriceHistory, {
       product: productEntity,
-      price,
+      price: currentPrice,
     });
     await AppDataSource.manager.save(history);
 
-    if (price <= product.targetPrice) {
-      await notifyPriceDrop(product, price);
+    if (currentPrice <= product.targetPrice) {
+      await notifyPriceDrop(product, currentPrice);
     }
   }
   await browser.close();

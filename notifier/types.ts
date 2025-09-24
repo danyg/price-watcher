@@ -1,23 +1,27 @@
 
-export type NotificationMessage = {
+export type NotificationValues = {
   product: string;
   url: string;
-  price: number;
+  currentPrice: number;
   threshold: number;
-  message: string;
 };
 
 export interface NotificationStrategy {
-  send(message: NotificationMessage): Promise<void>;
+  send(message: NotificationValues): Promise<void>;
 }
 
 export type NotificationStrategyType = 'webhook';
 
-export interface NotificationOutput {
+export interface BaseNotificationOutput {
   type: NotificationStrategyType;
 }
 
-export interface WebhookNotificationOutput extends NotificationOutput {
+export interface WebhookNotificationOutput extends BaseNotificationOutput {
   type: 'webhook';
   url: string;
+  extraPayload?: Record<string, any>;
+  messageTemplate?: string;
+  messageKey?: string;
 }
+
+export type NotificationOutput = BaseNotificationOutput | WebhookNotificationOutput;
