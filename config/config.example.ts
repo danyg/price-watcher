@@ -1,4 +1,3 @@
-import { title } from "process";
 import { Config } from "../types";
 
 const config: Config = {
@@ -6,10 +5,10 @@ const config: Config = {
     {
       name: "TV",
       url: "https://www.amazon.es/Samsung-Pulgadas-Xcelerator-Colores-certificados/dp/B0F225ZVVW",
-      selectorWithPrice: "#corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center.aok-relative > span.a-price.aok-align-center.reinventPricePriceToPayMargin.priceToPay",
+      selectorWithPrice:
+        "#corePriceDisplay_desktop_feature_div > div.a-section.a-spacing-none.aok-align-center.aok-relative > span.a-price.aok-align-center.reinventPricePriceToPayMargin.priceToPay",
       targetPrice: 1200,
     },
-    
   ],
   notificationOutputs: [
     {
@@ -23,6 +22,12 @@ const config: Config = {
       messageKey: "content",
     },
   ],
+  location: {
+    latitude: 40.4168,
+    longitude: -3.7038,
+    timezone: "Europe/Madrid",
+    languageHeader: "es-ES,es;q=0.9",
+  },
 };
 
 export default config;

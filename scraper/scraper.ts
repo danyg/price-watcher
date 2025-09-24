@@ -20,11 +20,11 @@ export async function scrapeAndStore() {
   // Set browser to report Spain as location and language
   const context = browser.defaultBrowserContext();
 
-  await page.setGeolocation({ latitude: 40.4168, longitude: -3.7038 }); // Madrid, Spain
+  await page.setGeolocation({ latitude: config.location.latitude, longitude: config.location.longitude }); // Madrid, Spain
   await page.setExtraHTTPHeaders({
-    "Accept-Language": "es-ES,es;q=0.9",
+    "Accept-Language": config.location.languageHeader,
   });
-  await page.emulateTimezone("Europe/Madrid");
+  await page.emulateTimezone(config.location.timezone);
 
   const getElementValue = getElementValueCreator(page);
 
@@ -109,3 +109,4 @@ const getElementValueCreator =
       .wait();
 
 const wait = (t: number) => new Promise((r) => setTimeout(r, t));
+
