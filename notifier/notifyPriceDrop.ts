@@ -5,10 +5,10 @@ export async function notifyPriceDrop(product: WatchedProduct, currentPrice: num
   const strategies = getNotificationStrategies();
   for (const strategy of strategies) {
     await strategy.send({
-      product: product.name,
+      productName: product.name,
       url: product.url,
       currentPrice,
-      threshold: product.targetPrice
+      thresholdPrice: product.targetPrice
     });
   }
 }

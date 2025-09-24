@@ -8,6 +8,7 @@
     "api": "tsx web/api-server.ts",
     "cron": "tsx scheduler/cron.ts",
     "build": "cd web; vite build",
+    "docker:build": "docker build -t price-watcher .",
     "web": "cd web; vite"
   },
   "dependencies": {

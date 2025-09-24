@@ -1,9 +1,9 @@
 
 export type NotificationValues = {
-  product: string;
+  productName: string;
   url: string;
   currentPrice: number;
-  threshold: number;
+  thresholdPrice: number;
 };
 
 export interface NotificationStrategy {
