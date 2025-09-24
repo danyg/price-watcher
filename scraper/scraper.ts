@@ -75,7 +75,7 @@ const log = (context: string, ...args: any[]) => {
 async function persistHistory(product: WatchedProduct, currentPrice: number) {
   log(`scraping|${product.name}`, `persisting history into db...`);
   let productEntity = await AppDataSource.manager.findOneBy(DB.WatchedProduct, {
-    url: product.url,
+    name: product.name,
   });
   if (!productEntity) {
     productEntity = AppDataSource.manager.create(DB.WatchedProduct, product);

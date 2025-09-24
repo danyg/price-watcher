@@ -14,7 +14,7 @@ interface PriceHistory {
   checkedAt: string;
 }
 
-const API = "http://localhost:3001/api";
+const API = "/api";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
