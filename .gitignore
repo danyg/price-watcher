@@ -27,3 +27,8 @@ yarn-error.log*
 # Docker
 pricewatcher.sqlite
 /config/config.ts
+
+# local stuff
+**/dg.*
+dg.*
+/dg.*
