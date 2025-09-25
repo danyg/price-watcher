@@ -14,17 +14,22 @@ RUN mkdir -p /app/puppeteer-cache
 ENV PUPPETEER_CACHE_DIR=/app/puppeteer-cache
 
 WORKDIR /app
-COPY . /app
+RUN mkdir -p /app/web
+COPY package.json package-lock.json ./
+COPY web/package.json web/package-lock.json ./web/
 
 # Install and build the app
 RUN npm install -g tsx pm2 && \
     npm install && \
     cd web && \
     npm install && \
-    npm run build && \
     cd ..
 RUN /app/node_modules/puppeteer/install.mjs
 RUN ls -lR /app/puppeteer-cache
+
+COPY . /app
+RUN cd web; npm run build;
+
 EXPOSE 3001
 
 RUN crontab /app/cronjob
