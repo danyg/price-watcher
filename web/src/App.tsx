@@ -34,6 +34,9 @@ interface PriceHistory {
 
 const API = "/api";
 
+// @ts-expect-error userLanguage is not in the types
+const locale = window.navigator.userLanguage || window.navigator.language;
+
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -75,7 +78,7 @@ function App() {
           </Typography>
           <Paper sx={{ mb: 4, p: 2 }}>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={history.map(h => ({ ...h, checkedAt: new Date(h.checkedAt).toLocaleString() }))}>
+              <LineChart data={history.map(h => ({ ...h, checkedAt: new Date(h.checkedAt).toLocaleString(locale) }))}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="checkedAt" tick={{ fontSize: 12 }} angle={-30} textAnchor="end" interval={Math.floor(history.length / 10)} />
                 <YAxis dataKey="price" tick={{ fontSize: 12 }} />
@@ -95,7 +98,7 @@ function App() {
               <TableBody>
                 {history.map((h) => (
                   <TableRow key={h.id}>
-                    <TableCell>{new Date(h.checkedAt).toLocaleString()}</TableCell>
+                    <TableCell>{new Date(h.checkedAt).toLocaleString(locale)}</TableCell>
                     <TableCell>{h.price}</TableCell>
                   </TableRow>
                 ))}
