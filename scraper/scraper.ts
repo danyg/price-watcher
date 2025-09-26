@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import puppeteer, { Page } from "puppeteer";
+import puppeteer, { Browser, CookieData, Page } from "puppeteer";
 import config from "../config/config";
 import { AppDataSource } from "../db/data-source";
 import * as DB from "../db/entities";
@@ -22,20 +22,10 @@ export async function scrapeAndStore() {
     ],
   });
   const page = await browser.newPage();
-
-  // Set browser to report Spain as location and language
-  const context = browser.defaultBrowserContext();
-
-  await page.setGeolocation({
-    latitude: config.location.latitude,
-    longitude: config.location.longitude,
-  }); // Madrid, Spain
-  await page.setExtraHTTPHeaders({
-    "Accept-Language": config.location.languageHeader,
-  });
-  await page.emulateTimezone(config.location.timezone);
-
   const getElementValue = getElementValueCreator(page);
+
+  const context = browser.defaultBrowserContext();
+  await setRegion(page);
 
   for (const product of config.watchedProducts) {
     await context.overridePermissions(new URL(product.url).origin, [
@@ -43,6 +33,8 @@ export async function scrapeAndStore() {
     ]);
 
     log(`scraping|${product.name}`, `navigating to page...`);
+    await setCookiesForProductBrowser(browser, product);
+    await setCookiesForProductPage(page, product);
     await page.goto(product.url, { waitUntil: "networkidle2" });
 
     log(`scraping|${product.name}`, `waiting for price...`);
@@ -78,6 +70,17 @@ if (require.main === module) {
 const log = (context: string, ...args: any[]) => {
   console.log(`[${new Date().toISOString()}] Scraper<${context}>: `, ...args);
 };
+
+async function setRegion(page: Page) {
+  await page.setGeolocation({
+    latitude: config.location.latitude,
+    longitude: config.location.longitude,
+  }); // Madrid, Spain
+  await page.setExtraHTTPHeaders({
+    "Accept-Language": config.location.languageHeader,
+  });
+  await page.emulateTimezone(config.location.timezone);
+}
 
 async function persistHistory(product: WatchedProduct, currentPrice: number) {
   log(`scraping|${product.name}`, `persisting history into db...`);
@@ -116,3 +119,27 @@ const getElementValueCreator =
       .wait();
 
 const wait = (t: number) => new Promise((r) => setTimeout(r, t));
+async function setCookiesForProductBrowser(browser: Browser, product: WatchedProduct) {
+  if (product.cookies) {
+    const cookies: CookieData[] = Object.entries(product.cookies).map(
+      ([name, value]) => ({
+        name,
+        value,
+        domain: new URL(product.url).hostname,
+      })
+    );
+    await browser.setCookie(...cookies);
+  }
+}
+async function setCookiesForProductPage(page: Page, product: WatchedProduct) {
+  if (product.cookies) {
+    const cookies: CookieData[] = Object.entries(product.cookies).map(
+      ([name, value]) => ({
+        name,
+        value,
+        domain: new URL(product.url).hostname,
+      })
+    );
+    await page.setCookie(...cookies);
+  }
+}

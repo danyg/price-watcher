@@ -5,6 +5,7 @@ export type WatchedProduct = {
   url: string;
   selectorWithPrice: string;
   targetPrice: number;
+  cookies?: Readonly<Record<string, string>>;
 };
 
 export type Config = {
