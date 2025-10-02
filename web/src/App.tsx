@@ -78,7 +78,7 @@ function App() {
           </Typography>
           <Paper sx={{ mb: 4, p: 2 }}>
             <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={history.map(h => ({ ...h, checkedAt: new Date(h.checkedAt).toLocaleString(locale) }))}>
+              <LineChart data={history.slice().reverse().map(h => ({ ...h, checkedAt: new Date(h.checkedAt).toLocaleString(locale) }))}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="checkedAt" tick={{ fontSize: 12 }} angle={-30} textAnchor="end" interval={Math.floor(history.length / 10)} />
                 <YAxis dataKey="price" tick={{ fontSize: 12 }} />
